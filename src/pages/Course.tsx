@@ -4,6 +4,35 @@ import Cookies from "js-cookie";
 import { Toaster, toast } from "sonner";
 import { IndianRupee } from "lucide-react";
 
+// Define proper types
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  totalMinutes: number;
+  sections: Section[];
+}
+
+interface Section {
+  _id: string;
+  sectionTitle: string;
+  videos: Video[];
+}
+
+interface Video {
+  _id: string;
+  title: string;
+  description: string;
+  url: string;
+  duration: number;
+}
+
+interface ProgressState {
+  overall: number;
+  videos: Record<string, number>;
+}
+
 // API Base URL
 const baseUrl = import.meta.env.VITE_BACKEND_API;
 
@@ -34,15 +63,21 @@ const ChevronUpIcon = () => (
 );
 
 const MyCourses = () => {
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
     useEffect(() => {
         const fetchEnrolledCourses = async () => {
             try {
                 const token = Cookies.get("auth_token");
+                if (!token) {
+                    setError("Authentication token not found");
+                    setLoading(false);
+                    return;
+                }
+                
                 const response = await axios.get(`${baseUrl}/api/enrollment/my-courses`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -58,7 +93,7 @@ const MyCourses = () => {
         fetchEnrolledCourses();
     }, []);
 
-    const viewCourse = (course: any) => {
+    const viewCourse = (course: Course) => {
         setSelectedCourse(course);
     };
 
@@ -95,7 +130,7 @@ const MyCourses = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {courses.map((course) => (
+                    {courses.filter(course => course).map((course) => (
                         <div 
                             key={course._id} 
                             className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow"
@@ -146,24 +181,24 @@ const MyCourses = () => {
 
 // Course Detail View Component
 interface CourseDetailViewProps {
-    course: any;
+    course: Course;
     enrolled: boolean;
     onBack: () => void;
     onEnroll: () => void;
 }
 
-const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailViewProps) => {
-    const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({});
+const CourseDetailView = ({ course, enrolled, onBack }: CourseDetailViewProps) => {
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
-    const [progress, setProgress] = useState({
+    const [progress, setProgress] = useState<ProgressState>({
         overall: 0,
         videos: {}
     });
 
     useEffect(() => {
         // Initialize with all sections expanded
-        const initialExpandedState: {[key: string]: boolean} = {};
-        course.sections.forEach((section: any) => {
+        const initialExpandedState: Record<string, boolean> = {};
+        course.sections.forEach((section) => {
             initialExpandedState[section._id] = true;
         });
         setExpandedSections(initialExpandedState);
@@ -176,6 +211,11 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
     const fetchProgress = async () => {
         try {
             const token = Cookies.get("auth_token");
+            if (!token) {
+                console.error("Auth token not found");
+                return;
+            }
+            
             const response = await axios.get(`${baseUrl}/api/progress/get?courseId=${course._id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -210,7 +250,21 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
         const updateProgress = async () => {
             try {
                 const token = Cookies.get("auth_token");
-                const userId = JSON.parse(atob(token.split('.')[1])).id;
+                if (!token) {
+                    console.error("Auth token not found");
+                    return;
+                }
+                
+                const tokenParts = token.split('.');
+                if (tokenParts.length !== 3) {
+                    console.error("Invalid token format");
+                    return;
+                }
+                
+                const payload = JSON.parse(atob(tokenParts[1]));
+                const userId = payload.id;
+                
+                const currentProgress = progress.videos[videoId] || 0;
                 
                 await axios.post(
                     `${baseUrl}/api/progress/update`,
@@ -219,7 +273,7 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
                         courseId: course._id,
                         videoId,
                         watchedMinutes: 1, // Just a small increment for demo
-                        progress: Math.min((progress.videos[videoId] || 0) + 10, 100) // Increment by 10% for demo
+                        progress: Math.min(currentProgress + 10, 100) // Increment by 10% for demo
                     },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -319,7 +373,7 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
                         </h3>
                         
                         <div className="space-y-4">
-                            {course.sections.map((section) => (
+                            {course.sections.map((section: Section) => (
                                 <div key={section._id} className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
                                     <button
                                         onClick={() => toggleSection(section._id)}
@@ -333,7 +387,7 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
                                     
                                     {expandedSections[section._id] && (
                                         <div className="p-4 space-y-2">
-                                            {section.videos.map((video) => (
+                                            {section.videos.map((video: Video) => (
                                                 <div 
                                                     key={video._id}
                                                     className={`flex justify-between items-center p-3 rounded-lg ${
@@ -358,7 +412,7 @@ const CourseDetailView = ({ course, enrolled, onBack, onEnroll }: CourseDetailVi
                                                             <div className="w-16">
                                                                 <div className="flex justify-between mb-1">
                                                                     <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                                                        {progress.videos[video._id] || 0}%
+                                                                        {(progress.videos[video._id] || 0)}%
                                                                     </span>
                                                                 </div>
                                                                 <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5">

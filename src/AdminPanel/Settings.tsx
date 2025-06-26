@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -32,14 +30,12 @@ import {
   Key,
   Save,
   Mail,
-  AlertTriangle,
   CheckCircle2,
   Shield,
   Loader2,
   Lock,
   Eye,
   EyeOff,
-  RefreshCw,
   UserCog,
 } from "lucide-react";
 
@@ -82,7 +78,7 @@ type UsernameFormValues = z.infer<typeof usernameFormSchema>;
 type RequestResetFormValues = z.infer<typeof requestResetSchema>;
 type VerifyCodeFormValues = z.infer<typeof verifyCodeSchema>;
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
-
+// eslint-disable-next-line
 const Settingss = () => {
   const [userData, setUserData] = useState<{ email: string; username: string } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -183,7 +179,7 @@ const Settingss = () => {
   const onRequestReset = async (data: RequestResetFormValues) => {
     setProcessingReset(true);
     try {
-      const response = await axios.post(`${baseUrl}/auth/forgot-password`, {
+      await axios.post(`${baseUrl}/auth/forgot-password`, {
         email: data.email,
       });
 

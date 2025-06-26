@@ -11,7 +11,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from '@/components/ui/card';
 import {
   Form,
@@ -48,7 +47,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Tooltip,
@@ -62,21 +60,15 @@ import {
   Mail, 
   BookOpen, 
   Clock, 
-  CheckCircle2,
-  XCircle,
-  TrendingUp,
   Users,
   Search,
   RefreshCw,
   Eye,
-  Filter,
-  GraduationCap,
   BarChart3,
   Activity,
   Award,
   Percent,
   AlertCircle,
-  Calendar
 } from 'lucide-react';
 
 // API Base URL
@@ -149,7 +141,7 @@ const UserAccess = () => {
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [loading, setLoading] = useState(false);
   const [isGranting, setIsGranting] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  // Removed unused dialogOpen state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedUser, setSelectedUser] = useState<UserProgress | null>(null);
@@ -224,7 +216,6 @@ const UserAccess = () => {
       
       toast.success(`Access granted to ${data.email}`);
       form.reset();
-      setDialogOpen(false);
       setRefreshKey(prev => prev + 1);
     } catch (error: any) {
       console.error('Error granting access:', error);
