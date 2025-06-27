@@ -580,7 +580,7 @@ const UserAccess = () => {
                               </div>
                             </TableCell>
                             <TableCell>
-                              <span className="font-medium">{user.courseId.title}</span>
+                              <span className="font-medium">{user.courseId?.title || 'Unknown Course'}</span>
                             </TableCell>
                             <TableCell>
                               <div className="space-y-1">
