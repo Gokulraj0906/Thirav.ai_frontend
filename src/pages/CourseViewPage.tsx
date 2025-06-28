@@ -228,11 +228,9 @@ const CourseViewAndEnrollPage: React.FC = () => {
       const enrollmentResponse = await api.get('/api/enrollment/check', {
         params: { userId: user.id, courseId },
       });
-      console.log('Enrollment check response:', enrollmentResponse.data);
       setEnrollmentStatus(enrollmentResponse.data);
 
       const accessResponse = await api.get(`/payment/check-access/${courseId}`);
-      console.log('Access check response:', accessResponse.data);
     } catch (error) {
       toast.error(`Error checking enrollment: ${error}`);
       setEnrollmentStatus(null);
@@ -305,7 +303,6 @@ const CourseViewAndEnrollPage: React.FC = () => {
     );
 
     const { orderId, amount, currency, key } = orderResponse.data;
-    console.log('Payment order created:', orderId);
 
     const options = {
       key: key || 'rzp_test_your_key',
@@ -315,7 +312,6 @@ const CourseViewAndEnrollPage: React.FC = () => {
       description: `Enrollment for ${selectedCourse.title}`,
       order_id: orderId,
       handler: function (response: any) {
-        console.log('Razorpay payment successful:', response);
         verifyPaymentAndEnroll({
           razorpay_order_id: response.razorpay_order_id,
           razorpay_payment_id: response.razorpay_payment_id,
@@ -331,7 +327,6 @@ const CourseViewAndEnrollPage: React.FC = () => {
       },
       modal: {
         ondismiss: function () {
-          console.log('Payment modal dismissed');
           setError('Payment cancelled');
         },
       },
@@ -367,9 +362,7 @@ const CourseViewAndEnrollPage: React.FC = () => {
     if (!selectedCourse || !user) return;
 
     try {
-      console.log('Verifying payment:', paymentDetails);
       await api.post('/payment/verify', paymentDetails);
-      console.log('Enrolling after payment verification');
       await api.post('/api/enrollment/enroll', {
         userId: user.id,
         courseId: selectedCourse._id,
