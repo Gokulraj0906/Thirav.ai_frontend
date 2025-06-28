@@ -37,7 +37,7 @@ interface Course {
   title: string;
   description: string;
   price: number;
-  thumbnail?: string;
+  thumbnailUrl?: string;
   instructor?: string;
   totalMinutes: number;
   sections: CourseSection[];
@@ -429,9 +429,9 @@ const CourseViewAndEnrollPage: React.FC = () => {
                 onClick={() => navigate(`/course/${course._id}`)}
               >
                 <div className="h-48 bg-muted">
-                  {course.thumbnail ? (
+                  {course.thumbnailUrl ? (
                     <img
-                      src={course.thumbnail}
+                      src={course.thumbnailUrl}
                       alt={course.title}
                       className="w-full h-full object-cover"
                     />
@@ -458,11 +458,11 @@ const CourseViewAndEnrollPage: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
-                  <Badge variant={course.price === 0 ? "outline" : "default"} className="text-lg py-1 px-2">
-                    {course.price === 0 ? 'Free' : `₹${course.price}`}
+                  <Badge variant={course.price === 0 ? "outline" : "default"} className="text-lg py-1 px-2 bg-blue-500 text-white">
+                  {course.price === 0 ? 'Free' : `₹${course.price}`}
                   </Badge>
-                  <Button variant="ghost" className="flex items-center">
-                    View Details <ChevronRight className="h-4 w-4 ml-1" />
+                  <Button variant="ghost" className="flex items-center text-blue-500">
+                  View Details <ChevronRight className="h-4 w-4 ml-1 text-blue-500" />
                   </Button>
                 </CardFooter>
               </Card>
@@ -630,9 +630,9 @@ const CourseViewAndEnrollPage: React.FC = () => {
 
             {/* Course Thumbnail */}
             <div className="md:w-1/3 bg-muted">
-              {selectedCourse.thumbnail ? (
+              {selectedCourse.thumbnailUrl ? (
                 <img
-                  src={selectedCourse.thumbnail}
+                  src={selectedCourse.thumbnailUrl}
                   alt={selectedCourse.title}
                   className="w-full h-full object-cover"
                 />

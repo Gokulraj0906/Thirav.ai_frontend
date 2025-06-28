@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { 
   Loader2, 
   Plus, 
@@ -221,18 +220,6 @@ const CouponManager = () => {
     return isAfter(expiryDate, now) && coupon.remainingUses > 0;
   };
 
-  const getStatusBadge = (coupon: Coupon) => {
-    const now = new Date();
-    const expiryDate = new Date(coupon.expiresAt);
-    
-    if (!isAfter(expiryDate, now)) {
-      return <Badge variant="destructive">Expired</Badge>;
-    } else if (coupon.remainingUses === 0) {
-      return <Badge variant="secondary">Exhausted</Badge>;
-    } else {
-      return <Badge variant="default">Active</Badge>;
-    }
-  };
 
   const formatDate = (dateString: string) => {
     try {
@@ -374,7 +361,7 @@ const CouponManager = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Coupons</p>
-                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className="text-2xl text-blue-600 font-bold">{stats.total}</p>
               </div>
               <Ticket className="h-8 w-8 text-gray-400" />
             </div>
@@ -445,7 +432,7 @@ const CouponManager = () => {
                 
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                       <Plus className="mr-2 h-4 w-4" />
                       Create Coupon
                     </Button>
@@ -697,9 +684,17 @@ const CouponManager = () => {
                               </span>
                             </div>
                           </TableCell>
-                          <TableCell>
-                            {getStatusBadge(coupon)}
-                          </TableCell>
+                            <TableCell>
+                            <div className="flex items-center">
+                              {coupon.isActive ? (
+                              <span className="text-green-600 font-bold">Active</span>
+                              ) : !isAfter(new Date(coupon.expiresAt), new Date()) ? (
+                              <span className="text-red-600 font-bold">Expired</span>
+                              ) : coupon.remainingUses === 0 ? (
+                              <span className="text-black font-bold">Exhausted</span>
+                              ) : null}
+                            </div>
+                            </TableCell>
                           <TableCell>
                             <div className="flex items-center space-x-2">
                               <TooltipProvider>

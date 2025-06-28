@@ -397,7 +397,7 @@ const UserAccess = () => {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="courseSelection"
                     render={({ field }) => (
@@ -417,75 +417,75 @@ const UserAccess = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
-                  {courseSelection === 'id' ? (
+                    {courseSelection === 'id' ? (
                     <FormField
                       control={form.control}
                       name="courseId"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Course</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a course" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {courses.map((course) => (
-                                <SelectItem key={course._id} value={course._id}>
-                                  {course.title}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormDescription>
-                            Select the course to grant access to
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
+                      <FormItem>
+                        <FormLabel>Course</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a course" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {courses.map((course) => (
+                          <SelectItem key={course._id} value={course._id}>
+                            {course.title}
+                          </SelectItem>
+                          ))}
+                        </SelectContent>
+                        </Select>
+                        <FormDescription>
+                        Select the course to grant access to
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
                       )}
                     />
-                  ) : (
+                    ) : (
                     <FormField
                       control={form.control}
                       name="courseName"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Course Name</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <BookOpen className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                              <Input 
-                                placeholder="Course name" 
-                                className="pl-10"
-                                {...field} 
-                              />
-                            </div>
-                          </FormControl>
-                          <FormDescription>
-                            Enter the exact name of the course
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
+                      <FormItem>
+                        <FormLabel>Course Name</FormLabel>
+                        <FormControl>
+                        <div className="relative w-full">
+                          <BookOpen className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input 
+                          placeholder="Course name" 
+                          className="pl-10 w-full"
+                          {...field} 
+                          />
+                        </div>
+                        </FormControl>
+                        <FormDescription>
+                        Enter the exact name of the course
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
                       )}
                     />
-                  )}
+                    )}
 
-                  <Button type="submit" disabled={isGranting}>
+                    <Button type="submit" disabled={isGranting} className="bg-blue-500 hover:bg-blue-600 text-white">
                     {isGranting ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Granting Access...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Granting Access...
                       </>
                     ) : (
                       <>
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Grant Access
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Grant Access
                       </>
                     )}
-                  </Button>
+                    </Button>
                 </form>
               </Form>
             </CardContent>

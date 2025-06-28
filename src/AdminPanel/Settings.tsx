@@ -310,8 +310,9 @@ const Settingss = () => {
                         )}
                       />
                       
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-4 ">
                         <Button 
+                          className="bg-blue-500 hover:bg-blue-600 text-white"
                           type="submit" 
                           disabled={updatingUsername || usernameForm.formState.isSubmitting}
                         >
@@ -322,7 +323,7 @@ const Settingss = () => {
                             </>
                           ) : (
                             <>
-                              <Save className="mr-2 h-4 w-4" />
+                              <Save className="mr-2 h-4 w-4 " />
                               Save Changes
                             </>
                           )}
@@ -400,6 +401,7 @@ const Settingss = () => {
                       
                       <Button 
                         type="submit" 
+                        className="bg-blue-500 hover:bg-blue-600 text-white"
                         disabled={processingReset || requestResetForm.formState.isSubmitting}
                       >
                         {processingReset ? (
