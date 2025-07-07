@@ -230,7 +230,7 @@ const CourseViewAndEnrollPage: React.FC = () => {
       });
       setEnrollmentStatus(enrollmentResponse.data);
 
-      const accessResponse = await api.get(`/payment/check-access/${courseId}`);
+      // const accessResponse = await api.get(`/payment/check-access/${courseId}`);
     } catch (error) {
       toast.error(`Error checking enrollment: ${error}`);
       setEnrollmentStatus(null);
