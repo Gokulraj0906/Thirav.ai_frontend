@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/login" element={<AuthPage />} />
         <Route path="/dashboard" element={<DashboardApp />} />
         <Route path="/coupons" element={<CouponManager />} />
         <Route path="/user-access" element={<UserAccess />} />
