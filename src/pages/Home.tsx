@@ -874,7 +874,7 @@ export default function HomePage() {
               <Button size="lg" className="h-12 px-8 rounded-full bg-white text-blue-600 hover:bg-blue-50">
                 Start Learning Today
               </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white text-white hover:bg-white hover:text-blue-600">
+              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white text-blue-600 hover:bg-white hover:text-blue-600">
                 Try Face Verification Demo
               </Button>
             </div>

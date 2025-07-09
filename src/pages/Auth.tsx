@@ -59,7 +59,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
 
   // Replace this URL with your actual backend endpoint
-  const baseUrl = "https://thirav-ai.onrender.com";
+  const baseUrl = import.meta.env.VITE_BACKEND_API;
 
   // Handle input changes for text, checkbox, etc.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
